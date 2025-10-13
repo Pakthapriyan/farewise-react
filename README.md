@@ -47,7 +47,7 @@ Choose your vehicle type (Auto / Car / Bike).
 
 Click “Get Fare” to see the estimated cost and route on the map.
 
-📁 Folder Structure
+Folder Structure
 src/
  ├─ components/
  │    ├─ Navbar.jsx
