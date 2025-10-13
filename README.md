@@ -47,7 +47,5 @@ Choose your vehicle type (Auto / Car / Bike).
 
 Click “Get Fare” to see the estimated cost and route on the map.
 
-Folder Structure
-<img width="398" height="355" alt="image" src="https://github.com/user-attachments/assets/e0cc7c5c-272c-4151-b2a3-3d155be03ba1" />
 
 
