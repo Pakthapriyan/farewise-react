@@ -47,25 +47,34 @@ export default function AutocompleteInput({
             const data = await res.json()
             if (Array.isArray(data?.features)) {
               // Photon
-              results = data.features.map(f => ({
-                id: f.properties?.osm_id || `${f.geometry?.coordinates?.join(',')}`,
-                label: f.properties?.name || f.properties?.country || 'Unknown',
-                subtitle: [f.properties?.city, f.properties?.state, f.properties?.country]
-                  .filter(Boolean).join(', '),
-                lat: f.geometry?.coordinates?.[1],
-                lon: f.geometry?.coordinates?.[0],
-              }))
+              results = data.features.map(f => {
+                const coordKey = `${(f.geometry?.coordinates||[]).join(',')}`
+                const id = `${f.properties?.osm_type || ''}:${f.properties?.osm_id || ''}:${coordKey}`
+                return {
+                  id,
+                  label: f.properties?.name || f.properties?.country || 'Unknown',
+                  subtitle: [f.properties?.city, f.properties?.state, f.properties?.country]
+                    .filter(Boolean).join(', '),
+                  lat: f.geometry?.coordinates?.[1],
+                  lon: f.geometry?.coordinates?.[0],
+                }
+              })
             } else if (Array.isArray(data)) {
               // Nominatim jsonv2
               results = data.map(it => ({
-                id: it.place_id,
+                id: `${it.osm_type || ''}:${it.osm_id || ''}:${it.place_id}`,
                 label: it.display_name?.split(',')?.[0] || it.name || 'Unknown',
                 subtitle: it.display_name,
                 lat: parseFloat(it.lat),
                 lon: parseFloat(it.lon),
               }))
             }
-            if (results.length) break
+            if (results.length) {
+              // De-duplicate by id
+              const seen = new Set()
+              results = results.filter(r => (seen.has(r.id) ? false : (seen.add(r.id), true)))
+              break
+            }
           } catch (_) { /* try next */ }
         }
 
@@ -117,8 +126,8 @@ export default function AutocompleteInput({
             <div className="px-3 py-2 text-sm text-gray-500">No matches</div>
           )}
           <ul>
-            {items.map((it) => (
-              <li key={it.id} className="border-b last:border-0 border-gray-100">
+            {items.map((it, idx) => (
+              <li key={`${it.id}-${idx}`} className="border-b last:border-0 border-gray-100">
                 <button
                   type="button"
                   onMouseDown={(e) => e.preventDefault()}
