@@ -1,4 +1,4 @@
-import InputField from './InputField';
+import AutocompleteInput from './AutocompleteInput';
 import Button1 from './Button1';
 
 export default function HeroSection({
@@ -32,13 +32,13 @@ export default function HeroSection({
         {/* Form overlay - bottom of image */}
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full flex justify-center pb-3 md:pb-8 px-4 pointer-events-auto">
           <div className="w-full max-w-3xl flex flex-col md:flex-row gap-3 md:gap-6 bg-white rounded-xl md:rounded-2xl shadow-lg md:shadow-2xl px-3 md:px-8 py-4 md:py-8 items-center">
-            <InputField
+            <AutocompleteInput
               placeholder="Enter start location"
               value={start}
               onChange={onStartChange}
               className="w-full md:w-auto rounded-full bg-gray-50 text-sm md:text-base shadow-none border border-gray-200 focus:border-[#FE7743]"
             />
-            <InputField
+            <AutocompleteInput
               placeholder="Enter destination"
               value={end}
               onChange={onEndChange}

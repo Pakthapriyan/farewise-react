@@ -1,5 +1,5 @@
 import { useState } from "react";
-import InputField from './InputField';
+import AutocompleteInput from './AutocompleteInput';
 import Button1 from './Button1';
 import RouteMap from "./RouteMap";
 import FareBreakdown from './FareBreakdown';
@@ -109,14 +109,14 @@ export default function FareCalculator({ start, end, onStartChange, onEndChange 
             onSubmit={e => { e.preventDefault(); handleCalculate(); }}
           >
           <label className="font-semibold text-sm md:text-base mb-1">From</label>
-            <InputField
+            <AutocompleteInput
               placeholder="Enter start location"
               value={start}
               onChange={onStartChange}
               className="rounded-full bg-gray-100 border-none px-4 md:px-7 py-3 md:py-4 text-gray-700 text-sm md:text-base placeholder:text-gray-500 focus:ring-2 focus:ring-[#FE7743] focus:border-none"
             />
             <label className="font-semibold text-sm md:text-base mb-1 mt-2">To</label>
-            <InputField
+            <AutocompleteInput
               placeholder="Enter destination"
               value={end}
               onChange={onEndChange}
