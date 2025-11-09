@@ -4,6 +4,14 @@ import L from "leaflet";
 import "leaflet-routing-machine";
 import { useEffect } from "react";
 
+// Guard against LRM occasional clearLines null errors
+if (L?.Routing?.Control && L.Routing.Control.prototype._clearLines) {
+  const orig = L.Routing.Control.prototype._clearLines;
+  L.Routing.Control.prototype._clearLines = function () {
+    try { return orig.call(this); } catch (e) { console.warn('LRM clearLines error ignored'); }
+  };
+}
+
 function Routing({ startCoords, endCoords }) {
   const map = useMap();
 

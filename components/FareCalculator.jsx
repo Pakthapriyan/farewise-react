@@ -9,21 +9,43 @@ import {
   getConditionsLabels,
 } from '../services/fareCalculationService';
 
-// Geocoding helper function
+// Geocoding helper function with fallback and timeout
 async function geocode(addr) {
-  // Use dev proxy alias that rewrites to Nominatim /search
-  const url = `/api/geocode?format=jsonv2&q=${encodeURIComponent(addr)}`;
-  const res = await fetch(url);
-  if (!res.ok) {
-    // Provide clearer hint when proxy isn’t active
-    if (res.status === 404) throw new Error('Geocode proxy not found (restart dev server)');
-    throw new Error(`Geocode failed: ${res.status}`);
+  const q = encodeURIComponent(addr);
+  const attempts = [
+    `/api/geocode?format=jsonv2&limit=1&q=${q}`,
+    // Fallback public proxy (best‑effort)
+    `https://geocode.maps.co/search?format=json&limit=1&q=${q}`,
+  ];
+
+  for (const url of attempts) {
+    try {
+      const controller = new AbortController();
+      const t = setTimeout(() => controller.abort(), 8000);
+      const res = await fetch(url, { signal: controller.signal });
+      clearTimeout(t);
+      if (!res.ok) {
+        // If first proxy isn’t active, hint to restart dev server
+        if (url.startsWith('/api/') && (res.status === 404 || res.status === 502)) {
+          console.warn('Dev proxy might not be active for', url);
+          continue;
+        }
+        // Try next provider
+        continue;
+      }
+      const data = await res.json();
+      if (data && data.length > 0) {
+        const item = data[0];
+        const lat = parseFloat(item.lat);
+        const lng = parseFloat(item.lon || item.lng);
+        if (!Number.isNaN(lat) && !Number.isNaN(lng)) return { lat, lng };
+      }
+    } catch (e) {
+      console.warn('Geocode attempt failed for', url, e);
+      // try next
+    }
   }
-  const data = await res.json();
-  if (data && data.length > 0) {
-    return { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
-  }
-  return null;
+  throw new Error('Unable to geocode location');
 }
 
 export default function FareCalculator({ start, end, onStartChange, onEndChange }) {
@@ -127,7 +149,7 @@ export default function FareCalculator({ start, end, onStartChange, onEndChange 
               >
                 {loading ? 'Calculating...' : 'Get Fare'}
               </Button1>
-              {error && (
+              {error && !fare && (
                 <div className="mt-4 p-3 bg-red-100 border border-red-300 rounded-lg text-red-800 text-sm">
                   {error}
                 </div>
