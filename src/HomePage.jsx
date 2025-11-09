@@ -10,12 +10,11 @@ import Footer from "../components/Footer";
 export default function HomePage() {
   const [start, setStart] = useState('');
   const [end, setEnd] = useState('');
-  const [showCalculator, setShowCalculator] = useState(false);
 
   const handleStartChange = (e) => setStart(e.target.value);
   const handleEndChange = (e) => setEnd(e.target.value);
 
-  const handleGetFare = () => setShowCalculator(true);
+  const handleGetFare = () => {};
   const handleCalculate = () => {
     // Add calculation/map logic here
   };

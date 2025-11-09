@@ -8,3 +8,4 @@ export default function Button1({ children, onClick, className = "" }) {
     </button>
   );
 }
+
