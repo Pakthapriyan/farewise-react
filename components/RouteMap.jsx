@@ -2,7 +2,7 @@
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet-routing-machine";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 // Guard against LRM occasional clearLines null errors
 if (L?.Routing?.Control && L.Routing.Control.prototype._clearLines) {
@@ -15,53 +15,67 @@ if (L?.Routing?.Control && L.Routing.Control.prototype._clearLines) {
 function Routing({ startCoords, endCoords }) {
   const map = useMap();
   const controlRef = useRef(null);
+  const [controlReady, setControlReady] = useState(false);
 
-  // Create control once
+  // Create control once (after map is ready)
   useEffect(() => {
     if (!map || controlRef.current) return;
 
-    const router = L.Routing.osrmv1({
-      serviceUrl: 'https://router.project-osrm.org/route/v1',
-      profile: 'driving',
-      timeout: 10000,
-      useHints: false,
+    map.whenReady(() => {
+      if (controlRef.current) return;
+
+      const router = L.Routing.osrmv1({
+        serviceUrl: 'https://router.project-osrm.org/route/v1',
+        profile: 'driving',
+        timeout: 10000,
+        useHints: false,
+      });
+
+      const ctrl = L.Routing.control({
+        waypoints: [],
+        router,
+        lineOptions: { styles: [{ color: "#3b82f6", weight: 5 }] },
+        draggableWaypoints: false,
+        addWaypoints: false,
+        routeWhileDragging: false,
+        fitSelectedRoutes: true,
+        showAlternatives: false,
+        show: false,
+        createMarker: () => null,
+      })
+        .on('routingerror', (e) => {
+          console.warn('Routing error', e?.error || e);
+        })
+        .addTo(map);
+
+      controlRef.current = ctrl;
+      setControlReady(true);
     });
 
-    const ctrl = L.Routing.control({
-      waypoints: [],
-      router,
-      lineOptions: { styles: [{ color: "#3b82f6", weight: 5 }] },
-      draggableWaypoints: false,
-      addWaypoints: false,
-      routeWhileDragging: false,
-      fitSelectedRoutes: true,
-      showAlternatives: false,
-      show: false,
-      createMarker: () => null,
-    })
-      .on('routingerror', (e) => {
-        console.warn('Routing error', e?.error || e);
-      })
-      .addTo(map);
-
-    controlRef.current = ctrl;
-
     return () => {
-      try { map.removeControl(ctrl); } catch (_) {}
-      controlRef.current = null;
+      if (controlRef.current) {
+        try { map.removeControl(controlRef.current); } catch (_) {}
+        controlRef.current = null;
+        setControlReady(false);
+      }
     };
   }, [map]);
 
   // Update waypoints when inputs change
   useEffect(() => {
-    if (!controlRef.current) return;
+    const ctrl = controlRef.current;
+    if (!ctrl || !controlReady) return;
     if (startCoords && endCoords) {
-      controlRef.current.setWaypoints([
-        L.latLng(startCoords.lat, startCoords.lng),
-        L.latLng(endCoords.lat, endCoords.lng),
-      ]);
+      try {
+        ctrl.setWaypoints([
+          L.latLng(startCoords.lat, startCoords.lng),
+          L.latLng(endCoords.lat, endCoords.lng),
+        ]);
+      } catch (e) {
+        console.warn('Failed to set waypoints', e);
+      }
     }
-  }, [startCoords, endCoords]);
+  }, [startCoords, endCoords, controlReady]);
 
   return null;
 }
