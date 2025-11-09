@@ -33,7 +33,7 @@ export default function RouteMap({ startCoords, endCoords }) {
     <MapContainer
       center={[center.lat, center.lng]}
       zoom={7}
-      style={{ height: "400px", width: "100%" }}
+      style={{ height: "100%", width: "100%" }}
       className="rounded-xl"
     >
       <TileLayer
