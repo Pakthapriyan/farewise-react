@@ -11,9 +11,14 @@ import {
 
 // Geocoding helper function
 async function geocode(addr) {
-  const url = `/api/nominatim/search?format=json&q=${encodeURIComponent(addr)}`;
+  // Use dev proxy alias that rewrites to Nominatim /search
+  const url = `/api/geocode?format=jsonv2&q=${encodeURIComponent(addr)}`;
   const res = await fetch(url);
-  if (!res.ok) throw new Error(`Geocode failed: ${res.status}`);
+  if (!res.ok) {
+    // Provide clearer hint when proxy isn’t active
+    if (res.status === 404) throw new Error('Geocode proxy not found (restart dev server)');
+    throw new Error(`Geocode failed: ${res.status}`);
+  }
   const data = await res.json();
   if (data && data.length > 0) {
     return { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };

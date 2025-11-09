@@ -25,6 +25,18 @@ export default defineConfig({
         headers: {
           'User-Agent': 'farewise-react dev (support@farewise.example)'
         }
+      },
+      // Simple alias for Nominatim's /search endpoint
+      '/api/geocode': {
+        target: 'https://nominatim.openstreetmap.org',
+        changeOrigin: true,
+        secure: true,
+        rewrite: (path) => path.replace(/^\/api\/geocode/, '/search'),
+        headers: {
+          'User-Agent': 'farewise-react dev (support@farewise.example)',
+          'Accept-Language': 'en',
+          'Referer': 'http://localhost'
+        }
       }
     }
   }
