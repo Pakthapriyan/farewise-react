@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Navbar from "../components/Navbar";
-import HeroSection from "../components/Herosection";
+import HeroSection from "../components/HeroSection";
 import FareCalculator from "../components/FareCalculator";
 import WhyFareWiseMatters from "../components/WhyFareWiseMatters";
 import DownloadBanner from "../components/DownloadBanner";
