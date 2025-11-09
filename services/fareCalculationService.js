@@ -59,7 +59,7 @@ export async function getWeatherMultiplier(latitude, longitude) {
   try {
     // Using Open-Meteo free API (no API key required)
     const response = await fetch(
-      `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=weather_code,precipitation,weather_description&timezone=auto`
+      `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=weather_code,precipitation&timezone=auto`
     );
     const data = await response.json();
     const weatherCode = data.current?.weather_code;

@@ -9,19 +9,38 @@ function Routing({ startCoords, endCoords }) {
 
   useEffect(() => {
     if (!startCoords || !endCoords) return;
+
+    const router = L.Routing.osrmv1({
+      serviceUrl: '/api/osrm/route/v1',
+      profile: 'driving',
+      timeout: 10000,
+      useHints: false,
+    });
+
     const routingControl = L.Routing.control({
       waypoints: [
         L.latLng(startCoords.lat, startCoords.lng),
         L.latLng(endCoords.lat, endCoords.lng),
       ],
+      router,
       lineOptions: { styles: [{ color: "#3b82f6", weight: 5 }] },
       draggableWaypoints: false,
       addWaypoints: false,
       routeWhileDragging: false,
       fitSelectedRoutes: true,
-    }).addTo(map);
+      showAlternatives: false,
+      show: false,
+      createMarker: () => null,
+    })
+      .on('routingerror', (e) => {
+        // Avoid library crashes on demo server/network issues
+        console.warn('Routing error', e?.error || e);
+      })
+      .addTo(map);
 
-    return () => map.removeControl(routingControl);
+    return () => {
+      try { map.removeControl(routingControl); } catch (_) {}
+    };
   }, [map, startCoords, endCoords]);
 
   return null;

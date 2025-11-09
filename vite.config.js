@@ -16,6 +16,15 @@ export default defineConfig({
           'Accept-Language': 'en',
           'Referer': 'http://localhost'
         }
+      },
+      '/api/osrm': {
+        target: 'https://router.project-osrm.org',
+        changeOrigin: true,
+        secure: true,
+        rewrite: (path) => path.replace(/^\/api\/osrm/, ''),
+        headers: {
+          'User-Agent': 'farewise-react dev (support@farewise.example)'
+        }
       }
     }
   }
