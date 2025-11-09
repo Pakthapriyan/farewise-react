@@ -5,7 +5,7 @@ export default function Navbar() {
   const [open, setOpen] = useState(false)
 
   return (
-    <header className="w-full bg-white border-b border-[#f8e9e2]" style={{ fontFamily: "'Poppins', sans-serif" }}>
+    <header className="w-full sticky top-0 z-50 bg-white border-b border-[#f8e9e2]" style={{ fontFamily: "'Poppins', sans-serif" }}>
       <nav className="relative h-auto md:h-[71px] flex items-center justify-between px-4 md:px-10 py-4 md:py-0">
         {/* Logo */}
         <a href="/" className="text-lg md:text-xl font-semibold text-gray-900">FareWise</a>
@@ -29,7 +29,7 @@ export default function Navbar() {
 
         {/* Mobile drawer */}
         {open && (
-          <div className="absolute top-full left-0 w-full bg-white border-b border-[#f8e9e2] md:hidden">
+          <div className="absolute top-full left-0 w-full bg-white border-b border-[#f8e9e2] shadow-md md:hidden z-40">
             <div className="px-4 py-3 flex flex-col gap-3">
               <a onClick={() => setOpen(false)} href="/" className="text-sm text-gray-800 hover:text-[#FE7743]">Home</a>
               <a onClick={() => setOpen(false)} href="#about" className="text-sm text-gray-800 hover:text-[#FE7743]">About</a>

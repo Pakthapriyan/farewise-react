@@ -1,11 +1,11 @@
 export default function Footer() {
   return (
     <footer className="w-full bg-white py-12 mt-20 flex flex-col items-center font-[Poppins]">
-      <div className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-4 gap-0 md:gap-12">
+      <div className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-12 px-4">
         {/* FareWise brand/info/contacts (left) */}
         <div>
           <h2 className="text-xl font-semibold mb-3">FareWise</h2>
-          <p className="text-gray-700 text-base mb-5 leading-relaxed">
+          <p className="text-gray-700 text-base mb-5 leading-relaxed break-words">
             FareWise helps you compare auto, cab, and bike ride fares instantly,<br/>
             making your travel smarter and your spending transparent.
           </p>
@@ -43,13 +43,13 @@ export default function Footer() {
           </ul>
         </div>
         {/* Get mobile app */}
-        <div className="flex flex-col items-center md:items-end justify-center gap-5">
-          <h3 className="font-semibold text-lg mb-3 text-right w-full">Get mobile app</h3>
-          <a href="#" className="bg-[#FE7743] hover:bg-orange-500 flex items-center w-[185px] h-[48px] rounded-full pl-5 font-semibold text-base text-[#292929] shadow transition">
+        <div className="flex flex-col items-stretch md:items-end justify-center gap-5">
+          <h3 className="font-semibold text-lg mb-3 text-left md:text-right w-full">Get mobile app</h3>
+          <a href="#" className="bg-[#FE7743] hover:bg-orange-500 flex items-center w-full sm:w-[185px] h-[48px] rounded-full pl-5 font-semibold text-base text-[#292929] shadow transition">
             <img src="/playstoreicon.png" alt="Google Play" className="w-7 h-7 mr-2" />
             <span>Google Play</span>
           </a>
-          <a href="#" className="bg-[#FE7743] hover:bg-orange-500 flex items-center w-[185px] h-[48px] rounded-full pl-5 font-semibold text-base text-[#292929] shadow transition">
+          <a href="#" className="bg-[#FE7743] hover:bg-orange-500 flex items-center w-full sm:w-[185px] h-[48px] rounded-full pl-5 font-semibold text-base text-[#292929] shadow transition">
             <img src="/applestore.png" alt="App Store" className="w-7 h-7 mr-2" />
             <span>App Store</span>
           </a>

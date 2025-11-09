@@ -40,21 +40,21 @@ export default function WhyFareWiseMatters() {
           {cards.map((card, idx) => (
             <div
               key={idx}
-              className="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-[#FE7743]"
+              className="group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl active:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-[#FE7743] active:border-[#FE7743] touch-manipulation"
             >
               {/* Background Gradient on Hover */}
-              <div className="absolute inset-0 bg-gradient-to-br from-[#FE7743]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="absolute inset-0 bg-gradient-to-br from-[#FE7743]/5 to-transparent opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300" />
 
               <div className="relative p-8">
                 {/* Image */}
                 <img
                   src={card.img}
                   alt={card.title}
-                  className="w-full h-40 mb-6 rounded-xl object-cover group-hover:scale-105 transition-transform duration-300"
+                  className="w-full h-40 mb-6 rounded-xl object-cover group-hover:scale-105 active:scale-105 transition-transform duration-300"
                 />
 
                 {/* Title */}
-                <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-[#FE7743] transition-colors">
+                <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-[#FE7743] active:text-[#FE7743] transition-colors">
                   {card.title}
                 </h3>
 
