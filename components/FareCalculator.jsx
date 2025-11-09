@@ -11,12 +11,13 @@ import {
 
 // Geocoding helper function with fallback and timeout
 async function geocode(addr) {
-  const q = encodeURIComponent(addr);
+  const q = encodeURIComponent(`${addr}, India`);
   const attempts = [
+    // Prefer Photon first (CORS friendly and usually stable)
+    `https://photon.komoot.io/api/?limit=1&lang=en&q=${q}`,
+    // Then try Nominatim via proxies
     `/api/geocode?format=jsonv2&limit=1&countrycodes=in&q=${q}`,
     `/api/nominatim/search?format=jsonv2&limit=1&countrycodes=in&q=${q}`,
-    // CORS-friendly public geocoder (GeoJSON output)
-    `https://photon.komoot.io/api/?limit=1&q=${q}`,
   ];
 
   for (const url of attempts) {
