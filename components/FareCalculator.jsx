@@ -66,57 +66,57 @@ export default function FareCalculator({ start, end, onStartChange, onEndChange 
   };
 
   return (
-    <section className="w-full bg-white py-8" style={{ fontFamily: "'Poppins', sans-serif" }}>
-      <h2 className="text-3xl font-semibold text-center mb-14">Fare Calculator</h2>
-      <div className="w-full max-w-6xl mx-auto">
+    <section className="w-full bg-white py-6 md:py-8" style={{ fontFamily: "'Poppins', sans-serif" }}>
+      <h2 className="text-2xl md:text-3xl font-semibold text-center mb-8 md:mb-14 px-4">Fare Calculator</h2>
+      <div className="w-full max-w-6xl mx-auto px-4 md:px-0">
         {/* Form and Map Row */}
-        <div className="grid md:grid-cols-2 gap-14 items-start mb-8">
+        <div className="grid md:grid-cols-2 gap-6 md:gap-14 items-start mb-6 md:mb-8">
           {/* Left: Form column */}
           <form
-            className="flex flex-col gap-7 px-2 md:px-0 max-w-[420px] w-full"
+            className="flex flex-col gap-5 md:gap-7 w-full"
             onSubmit={e => { e.preventDefault(); handleCalculate(); }}
           >
-            <label className="font-semibold text-base mb-1">From</label>
+          <label className="font-semibold text-sm md:text-base mb-1">From</label>
             <InputField
               placeholder="Enter start location"
               value={start}
               onChange={onStartChange}
-              className="rounded-full bg-gray-100 border-none px-7 py-4 text-gray-700 text-base placeholder:text-gray-500 focus:ring-2 focus:ring-[#FE7743] focus:border-none"
+              className="rounded-full bg-gray-100 border-none px-4 md:px-7 py-3 md:py-4 text-gray-700 text-sm md:text-base placeholder:text-gray-500 focus:ring-2 focus:ring-[#FE7743] focus:border-none"
             />
-            <label className="font-semibold text-base mb-1 mt-2">To</label>
+            <label className="font-semibold text-sm md:text-base mb-1 mt-2">To</label>
             <InputField
               placeholder="Enter destination"
               value={end}
               onChange={onEndChange}
-              className="rounded-full bg-gray-100 border-none px-7 py-4 text-gray-700 text-base placeholder:text-gray-500 focus:ring-2 focus:ring-[#FE7743] focus:border-none"
+              className="rounded-full bg-gray-100 border-none px-4 md:px-7 py-3 md:py-4 text-gray-700 text-sm md:text-base placeholder:text-gray-500 focus:ring-2 focus:ring-[#FE7743] focus:border-none"
             />
-            <div className="mt-2">
-              <label className="font-semibold text-base mb-2 block">Choose Vehicle</label>
-              <div className="flex gap-8 items-center mt-2">
-                {["bike", "auto", "car"].map(v => (
-                  <label
-                    key={v}
-                    className={`flex items-center gap-2 text-base font-normal ${vehicle === v ? 'text-[#FE7743]' : 'text-gray-800'}`}
-                  >
-                    <input
-                      type="radio"
-                      name="vehicle"
-                      value={v}
-                      checked={vehicle === v}
-                      onChange={() => setVehicle(v)}
-                      className="accent-[#FE7743] w-5 h-5"
-                    />
-                    <span style={{ textTransform: "capitalize" }}>
-                      {v.charAt(0).toUpperCase() + v.slice(1)}
-                    </span>
-                  </label>
-                ))}
-              </div>
+          <div className="mt-3 md:mt-2">
+            <label className="font-semibold text-sm md:text-base mb-2 block">Choose Vehicle</label>
+            <div className="flex gap-4 md:gap-8 items-center mt-2 flex-wrap">
+              {["bike", "auto", "car"].map(v => (
+                <label
+                  key={v}
+                  className={`flex items-center gap-2 text-sm md:text-base font-normal ${vehicle === v ? 'text-[#FE7743]' : 'text-gray-800'}`}
+                >
+                  <input
+                    type="radio"
+                    name="vehicle"
+                    value={v}
+                    checked={vehicle === v}
+                    onChange={() => setVehicle(v)}
+                    className="accent-[#FE7743] w-4 md:w-5 h-4 md:h-5"
+                  />
+                  <span style={{ textTransform: "capitalize" }}>
+                    {v.charAt(0).toUpperCase() + v.slice(1)}
+                  </span>
+                </label>
+              ))}
             </div>
+          </div>
             <Button1
                 onClick={handleCalculate}
                 disabled={loading}
-                className="mt-6 w-full py-4 rounded-full bg-[#FE7743] hover:bg-orange-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold text-lg shadow-none transition"
+                className="mt-4 md:mt-6 w-full py-3 md:py-4 rounded-full bg-[#FE7743] hover:bg-orange-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold text-base md:text-lg shadow-none transition"
               >
                 {loading ? 'Calculating...' : 'Get Fare'}
               </Button1>
