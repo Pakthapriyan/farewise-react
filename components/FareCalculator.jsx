@@ -15,6 +15,8 @@ async function geocode(addr) {
   const attempts = [
     `/api/geocode?format=jsonv2&limit=1&countrycodes=in&q=${q}`,
     `/api/nominatim/search?format=jsonv2&limit=1&countrycodes=in&q=${q}`,
+    // CORS-friendly public geocoder (GeoJSON output)
+    `https://photon.komoot.io/api/?limit=1&q=${q}`,
   ];
 
   for (const url of attempts) {
@@ -33,10 +35,17 @@ async function geocode(addr) {
         continue;
       }
       const data = await res.json();
-      if (data && data.length > 0) {
+      // Nominatim JSONv2 format
+      if (Array.isArray(data) && data.length > 0) {
         const item = data[0];
         const lat = parseFloat(item.lat);
         const lng = parseFloat(item.lon || item.lng);
+        if (!Number.isNaN(lat) && !Number.isNaN(lng)) return { lat, lng };
+      }
+      // Photon GeoJSON format
+      if (data && Array.isArray(data.features) && data.features.length > 0) {
+        const f = data.features[0];
+        const [lng, lat] = f.geometry?.coordinates || [];
         if (!Number.isNaN(lat) && !Number.isNaN(lng)) return { lat, lng };
       }
     } catch (e) {
