@@ -24,7 +24,7 @@ export default function FareBreakdown({ fare, conditions }) {
   };
 
   return (
-    <div className="w-full p-6 bg-gradient-to-br from-orange-50 to-yellow-50 rounded-2xl border-2 border-[#FE7743] shadow-lg">
+    <div className="w-full p-6 bg-gradient-to-br from-orange-50 to-yellow-50 rounded-2xl border-2 border-[#FE7743] shadow-lg" style={{ fontFamily: "'Poppins', sans-serif" }}>
       {/* Main Fare Display */}
       <div className="mb-6 pb-6 border-b-2 border-[#FE7743]">
         {/* Distance info */}
