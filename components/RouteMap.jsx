@@ -2,7 +2,7 @@
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet-routing-machine";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 // Guard against LRM occasional clearLines null errors
 if (L?.Routing?.Control && L.Routing.Control.prototype._clearLines) {
@@ -14,9 +14,11 @@ if (L?.Routing?.Control && L.Routing.Control.prototype._clearLines) {
 
 function Routing({ startCoords, endCoords }) {
   const map = useMap();
+  const controlRef = useRef(null);
 
+  // Create control once
   useEffect(() => {
-    if (!startCoords || !endCoords) return;
+    if (!map || controlRef.current) return;
 
     const router = L.Routing.osrmv1({
       serviceUrl: '/api/osrm/route/v1',
@@ -25,11 +27,8 @@ function Routing({ startCoords, endCoords }) {
       useHints: false,
     });
 
-    const routingControl = L.Routing.control({
-      waypoints: [
-        L.latLng(startCoords.lat, startCoords.lng),
-        L.latLng(endCoords.lat, endCoords.lng),
-      ],
+    const ctrl = L.Routing.control({
+      waypoints: [],
       router,
       lineOptions: { styles: [{ color: "#3b82f6", weight: 5 }] },
       draggableWaypoints: false,
@@ -41,15 +40,28 @@ function Routing({ startCoords, endCoords }) {
       createMarker: () => null,
     })
       .on('routingerror', (e) => {
-        // Avoid library crashes on demo server/network issues
         console.warn('Routing error', e?.error || e);
       })
       .addTo(map);
 
+    controlRef.current = ctrl;
+
     return () => {
-      try { map.removeControl(routingControl); } catch (_) {}
+      try { map.removeControl(ctrl); } catch (_) {}
+      controlRef.current = null;
     };
-  }, [map, startCoords, endCoords]);
+  }, [map]);
+
+  // Update waypoints when inputs change
+  useEffect(() => {
+    if (!controlRef.current) return;
+    if (startCoords && endCoords) {
+      controlRef.current.setWaypoints([
+        L.latLng(startCoords.lat, startCoords.lng),
+        L.latLng(endCoords.lat, endCoords.lng),
+      ]);
+    }
+  }, [startCoords, endCoords]);
 
   return null;
 }

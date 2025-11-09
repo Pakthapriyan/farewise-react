@@ -21,17 +21,12 @@ async function geocode(addr) {
 
   for (const url of attempts) {
     try {
-      const controller = new AbortController();
-      const t = setTimeout(() => controller.abort(), 8000);
-      const res = await fetch(url, { signal: controller.signal });
-      clearTimeout(t);
+      const res = await fetch(url);
       if (!res.ok) {
-        // If first proxy isn’t active, hint to restart dev server
         if (url.startsWith('/api/') && (res.status === 404 || res.status === 502)) {
           console.warn('Dev proxy might not be active for', url);
           continue;
         }
-        // Try next provider
         continue;
       }
       const data = await res.json();
