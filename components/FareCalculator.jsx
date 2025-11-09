@@ -13,9 +13,8 @@ import {
 async function geocode(addr) {
   const q = encodeURIComponent(addr);
   const attempts = [
-    `/api/geocode?format=jsonv2&limit=1&q=${q}`,
-    // Fallback public proxy (best‑effort)
-    `https://geocode.maps.co/search?format=json&limit=1&q=${q}`,
+    `/api/geocode?format=jsonv2&limit=1&countrycodes=in&q=${q}`,
+    `/api/nominatim/search?format=jsonv2&limit=1&countrycodes=in&q=${q}`,
   ];
 
   for (const url of attempts) {

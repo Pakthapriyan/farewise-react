@@ -12,8 +12,9 @@ export default defineConfig({
         secure: true,
         rewrite: (path) => path.replace(/^\/api\/nominatim/, ''),
         headers: {
-          'User-Agent': 'farewise-react dev (support@farewise.example)',
+          'User-Agent': 'FareWiseDev/1.0 (+https://github.com/Pakthapriyan/farewise-react; contact: pakthapriyan@example.com)',
           'Accept-Language': 'en',
+          'Accept': 'application/json',
           'Referer': 'http://localhost'
         }
       },
@@ -33,8 +34,9 @@ export default defineConfig({
         secure: true,
         rewrite: (path) => path.replace(/^\/api\/geocode/, '/search'),
         headers: {
-          'User-Agent': 'farewise-react dev (support@farewise.example)',
+          'User-Agent': 'FareWiseDev/1.0 (+https://github.com/Pakthapriyan/farewise-react; contact: pakthapriyan@example.com)',
           'Accept-Language': 'en',
+          'Accept': 'application/json',
           'Referer': 'http://localhost'
         }
       }
