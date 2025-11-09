@@ -13,11 +13,10 @@ import {
 async function geocode(addr) {
   const q = encodeURIComponent(`${addr}, India`);
   const attempts = [
-    // Prefer Photon first (CORS friendly and usually stable)
+    // Prefer Photon only to avoid proxy failures during dev
     `https://photon.komoot.io/api/?limit=1&lang=en&q=${q}`,
-    // Then try Nominatim via proxies
-    `/api/geocode?format=jsonv2&limit=1&countrycodes=in&q=${q}`,
-    `/api/nominatim/search?format=jsonv2&limit=1&countrycodes=in&q=${q}`,
+    // Final fallback: direct Nominatim (may be blocked by CORS in some browsers)
+    `https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&countrycodes=in&q=${q}`,
   ];
 
   for (const url of attempts) {

@@ -21,7 +21,7 @@ function Routing({ startCoords, endCoords }) {
     if (!map || controlRef.current) return;
 
     const router = L.Routing.osrmv1({
-      serviceUrl: '/api/osrm/route/v1',
+      serviceUrl: 'https://router.project-osrm.org/route/v1',
       profile: 'driving',
       timeout: 10000,
       useHints: false,
